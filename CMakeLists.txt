@@ -5,7 +5,7 @@ include(SetupToolchain)
 include(ConfigureTarget)
 include(CompilerWarnings)
 
-project(template LANGUAGES CXX)
+project(smart-ptrs LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -29,8 +29,8 @@ ct_configure_target(tests)
 target_link_libraries(tests PRIVATE solution)
 
 # Link tests with dependencies
-find_package(Catch2 REQUIRED)
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+find_package(GTest REQUIRED)
+target_link_libraries(tests PRIVATE GTest::gtest GTest::gtest_main)
 
 # Enable warnings
 option(CT_TREAT_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
