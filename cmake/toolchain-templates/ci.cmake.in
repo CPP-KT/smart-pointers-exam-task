@@ -1,0 +1,12 @@
+include("@CMAKE_SOURCE_DIR@/cmake/ConfigureCompiler.cmake")
+
+ct_set_compiler("@CT_C_EXE@" "@CT_CXX_EXE@")
+ct_configure_compiler("@CT_COMPILER_ID@" "@CT_HARDENED" "@CT_SANITIZED@" OFF)
+
+set(CMAKE_C_FLAGS "${CT_COMPILER_FLAGS}" CACHE STRING "")
+set(CMAKE_CXX_FLAGS "${CT_COMPILER_FLAGS}" CACHE STRING "")
+
+foreach(linker IN ITEMS "SHARED" "MODULE" "EXE")
+  set(CMAKE_${linker}_LINKER_FLAGS_INIT "${CT_LINKER_FLAGS}" CACHE STRING "")
+  set(CMAKE_${linker}_LINKER_FLAGS "${CT_LINKER_FLAGS}" CACHE STRING "")
+endforeach()
