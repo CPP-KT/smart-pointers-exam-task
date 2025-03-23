@@ -286,70 +286,6 @@ TEST_F(ListPtrTest, InheritanceConvertible) {
   EXPECT_TRUE(!(std::is_convertible_v<const ConstBase&, Derived>) );
 }
 
-TEST_F(ListPtrTest, AliasingCtor) {
-  Ptr p(new TestObject(magic));
-  std::string x;
-  ListPtr<std::string> q(p, &x);
-  EXPECT_EQ(2, p.useCount());
-  EXPECT_EQ(2, q.useCount());
-  EXPECT_EQ(&x, q.get());
-}
-
-TEST_F(ListPtrTest, AliasingCtorNullptrNonEmpty) {
-  Ptr p(new TestObject(magic));
-  ListPtr<std::string> q(p, nullptr);
-  EXPECT_EQ(2, p.useCount());
-  EXPECT_EQ(2, q.useCount());
-  EXPECT_EQ(nullptr, q.get());
-  EXPECT_TRUE(static_cast<bool>(p));
-  EXPECT_FALSE(static_cast<bool>(q));
-}
-
-TEST_F(ListPtrTest, AliasingCtorEmptyNonNullptr) {
-  Ptr p;
-  std::string x;
-  ListPtr<std::string> q(p, &x);
-  EXPECT_EQ(0, p.useCount());
-  EXPECT_EQ(0, q.useCount());
-  EXPECT_EQ(nullptr, p.get());
-  EXPECT_EQ(&x, q.get());
-  EXPECT_FALSE(static_cast<bool>(p));
-  EXPECT_TRUE(static_cast<bool>(q));
-}
-
-TEST_F(ListPtrTest, AliasingMoveCtor) {
-  Ptr p(new TestObject(magic));
-  std::string x;
-  ListPtr<std::string> q(std::move(p), &x);
-  EXPECT_EQ(0, p.useCount());
-  EXPECT_EQ(1, q.useCount());
-  EXPECT_EQ(nullptr, p.get());
-  EXPECT_EQ(&x, q.get());
-}
-
-TEST_F(ListPtrTest, AliasingMoveCtorNullptrNonEmpty) {
-  Ptr p(new TestObject(magic));
-  ListPtr<std::string> q(std::move(p), nullptr);
-  EXPECT_EQ(0, p.useCount());
-  EXPECT_EQ(1, q.useCount());
-  EXPECT_EQ(nullptr, p.get());
-  EXPECT_EQ(nullptr, q.get());
-  EXPECT_FALSE(static_cast<bool>(p));
-  EXPECT_FALSE(static_cast<bool>(q));
-}
-
-TEST_F(ListPtrTest, AliasingMoveCtorEmptyNonNullptr) {
-  Ptr p;
-  std::string x;
-  ListPtr<std::string> q(std::move(p), &x);
-  EXPECT_EQ(0, p.useCount());
-  EXPECT_EQ(0, q.useCount());
-  EXPECT_EQ(nullptr, p.get());
-  EXPECT_EQ(&x, q.get());
-  EXPECT_FALSE(static_cast<bool>(p));
-  EXPECT_TRUE(static_cast<bool>(q));
-}
-
 TEST_F(ListPtrTest, CopyCtorConst) {
   Ptr p(new TestObject(magic));
   ListPtr<const TestObject> q = p;
@@ -481,25 +417,6 @@ TEST_F(ListPtrTest, Equivalence) {
 
   EXPECT_FALSE(p1 == p2);
   EXPECT_TRUE(p1 != p2);
-}
-
-TEST_F(ListPtrTest, EquivalenceAliasing) {
-  Ptr p1(new TestObject(magic));
-  Ptr p2(new TestObject(magic + 1));
-  Ptr q1(p2, p1.get());
-  Ptr q2(p1, p2.get());
-
-  EXPECT_TRUE(p1 == q1);
-  EXPECT_FALSE(p1 != q1);
-
-  EXPECT_TRUE(p2 == q2);
-  EXPECT_FALSE(p2 != q2);
-
-  EXPECT_FALSE(p1 == q2);
-  EXPECT_TRUE(p1 != q2);
-
-  EXPECT_FALSE(p2 == q1);
-  EXPECT_TRUE(p2 != q1);
 }
 
 TEST_F(ListPtrTest, EquivalenceSelf) {

@@ -19,12 +19,6 @@ public:
 
   ListPtr(const ListPtr& other);
 
-  template <typename Y, typename D>
-  ListPtr(const ListPtr<Y, D>& other, T* ptr);
-
-  template <typename Y, typename D>
-  ListPtr(ListPtr<Y, D>&& other, T* ptr);
-
   ListPtr(ListPtr&& other);
 
   template <typename Y, typename D>
